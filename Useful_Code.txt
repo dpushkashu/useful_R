@@ -1,0 +1,132 @@
+# READ IN CSV FILE
+read.csv(file, header = TRUE, sep = ",", quote = "\"",
+         dec = ".", fill = TRUE, comment.char = "", ...)
+
+# WRITING OUT TO A CVS FILE
+write.csv(numdata, "numdata.csv", row.names=FALSE, na="")
+
+# SELECT SOME ROWS AT RANDOME
+df[sample(nrow(df), 3), ] 
+
+# REMOVING A VARIABLE
+dataframe$VAR <- NULL
+
+# GRAPH MULTIPLES
+par(mfrow=c(3, 3)
+
+# GET INDEX (COLUMN) NUMBER OF A VARIABLE
+ match("b",names(df))
+# See fastmatch package
+
+# exclude 3rd and 5th variable
+newdata <- mydata[c(-3,-5)]
+
+# delete variables v3 and v5
+mydata$v3 <- mydata$v5 <- NULL 
+
+# SELECT SPECIFIC VARIABLE TYPES
+(ds[which(sapply(ds, is.numeric))])
+
+# WRITE A MODEL WITH 100s of PREDICTORS
+df<-data.frame(y=rnorm(10),x1=rnorm(10),x2=rnorm(10))
+lm(y~.,df)
+
+And if you want, say, all second-order interactions, you can write y ~ . + .^2. And so on. –  Lutz Prechelt Mar 12 at 14:46
+   	 
+And if you want only some of the second order interactions, something like y ~ . + .:x1 will get you the interactions of each variable (except x1) with x1. And so on; you get the idea. –  Lutz Prechelt Mar 12 at 14:48 
+
+SELECTING OBSERVATIONS
+# first 5 observations
+newdata <- mydata[1:5,]
+
+# based on variable values
+newdata <- mydata[ which(mydata$gender=='F'
+& mydata$age > 65), ]
+
+# or
+attach(newdata)
+newdata <- mydata[ which(gender=='F' & age > 65),]
+detach(newdata) 
+
+/////////////////////////////////////////////
+/////////////////////////////////////////////
+# SET EMPTY VALUES TO na
+
+# A good idea is to set all of the "" (blank cells) to NA before any further analysis.
+
+# If you are reading your input from a file, it is a good choice to cast all "" to NAs:
+
+foo <- read.table(file="Your_file.txt", na.strings=c("", "NA"), sep="\t") # if your file is tab delimited
+
+# If you have already your table loaded, you can act as follows:
+
+foo[foo==""] <- NA
+
+# Then to keep only rows with no NA you may just use na.omit():
+
+foo <- na.omit(foo)
+
+# Or to keep columns with no NA:
+
+foo <- foo[, colSums(is.na(foo)) == 0]
+/////////////////////////////////////////////
+/////////////////////////////////////////////
+
+
+
+# CREATE TABLE FOR CATEGORICAL VALUE; SHOW MISSING VALUES
+table(data$VAR, useNA="ifany")
+
+
+I primarily work in Rstudio, so I can't promise how all of these work in the standard R Console, but it shouldn't be much different.
+
+As we start working with more data and get longer output, things tend to get messy. One issue that can occur is that variable data stays in memory. There have been several times that I've tried to figure out why a program isn't running correctly, only to realize that the program was using old variable data. One way to fix that is to put the following line at the top of your R script. It will also clear the console window, which gives you a fresh screen:
+
+# Clear the workspace, so that the data is fresh
+rm(list=ls())
+
+# Clear the console in windows
+cat("\014")
+
+When the console output is too long and won't fit on the screen, you can use this code to capture the output to a file:
+
+Begin your code chunk with:
+
+con <- file("Programming_Assignment.out")
+sink(con, append=TRUE)
+sink(con, append=TRUE, type="message")
+
+and end it with
+
+sink()
+sink(type="message")
+
+Since I didn't include a try/catch/finally block, if your code crashes before it reaches the sink() line, the output file will be locked, and you'll need to type the last two lines directly in the console to unlock the file (or highlight them and click the 'run' button in Rstudio).
+
+Anyway, these are simple tricks that I've found make my life easier.
+
+# ORDERED CORRELATION MATRIX
+
+require(reshape)
+## set up dummy data
+a <- rnorm(100)
+b <- a + (rnorm(100, 0, 2))
+c <- a + b + (rnorm(100)/10)
+df <- data.frame(a, b, c)
+c <- cor(ds[which(sapply(ds, is.numeric))], use="complete.obs")
+## c is the correlations matrix
+
+## keep only the lower triangle by 
+## filling upper with NA
+c[upper.tri(c, diag=TRUE)] <- NA
+
+m <- melt(c)
+
+## sort by descending absolute correlation
+m <- m[order(- abs(m$value)), ]
+
+## omit the NA values
+dfOut <- na.omit(m)
+
+## if you really want a list and not a data.frame
+listOut <- split(dfOut, 1:nrow(dfOut))

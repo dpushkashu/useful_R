@@ -1,0 +1,135 @@
+# FROM: http://jee3.web.rice.edu/teaching.htm
+
+rm(list=ls())
+set.seed(973487)
+
+load(url('http://biostat.mc.vanderbilt.edu/wiki/pub/Main/DataSets/titanic3.sav'))
+
+#####
+# create training and forecasting data sets from sample
+#####
+o<-order(runif(dim(titanic3)[1]))
+titanic.train <- titanic3[o[1:655],]
+titanic.pred <- titanic3[o[656:1309],]
+
+##########################
+##########################
+# logit classification
+##########################
+##########################
+
+titanic.survival.mod <- glm(survived ~ pclass + sex + pclass:sex + age + sibsp, family = binomial(logit), data = titanic.train)
+summary(titanic.survival.mod)
+
+# perform in sample predictions
+titanic.is.predict<-predict(titanic.survival.mod, type="response", newdata=titanic.train)
+
+# perform out of sample predictions
+titanic.oos.predict<-predict(titanic.survival.mod, type="response", newdata=titanic.pred)
+
+####
+# Percent correctly predicted assessment, in- and out-of-sample
+####
+
+# in-sample percent survivors correctly predicted
+live.logit<-which(titanic.is.predict>0.5)
+sum(titanic.train$survived[live.logit])/length(live.logit)
+
+# in-sample percent fatalities correctly predicted
+die.logit<-which(titanic.is.predict<=0.5)
+1-sum(titanic.train$survived[die.logit])/length(die.logit)
+
+# out-of-sample percent survivors correctly predicted
+live.logit<-which(titanic.oos.predict>0.5)
+sum(titanic.pred$survived[live.logit])/length(live.logit)
+
+# out-of-sample percent fatalities correctly predicted
+die.logit<-which(titanic.oos.predict<=0.5)
+1-sum(titanic.pred$survived[die.logit])/length(die.logit)
+
+
+####
+# Expected PCP, in- and out-of-sample
+####
+
+# in-sample
+survivors<-which(titanic.train$survived==1)
+fatalities<-which(titanic.train$survived==0)
+
+sum(na.omit(titanic.is.predict[survivors]))/length(na.omit(titanic.is.predict[survivors]))
+sum(na.omit(1-titanic.is.predict[fatalities]))/length(na.omit(1-titanic.is.predict[fatalities]))
+
+# out-of-sample
+survivors<-which(titanic.pred$survived==1)
+fatalities<-which(titanic.pred$survived==0)
+
+sum(na.omit(titanic.oos.predict[survivors]))/length(na.omit(titanic.oos.predict[survivors]))
+sum(na.omit(1-titanic.oos.predict[fatalities]))/length(na.omit(1-titanic.oos.predict[fatalities]))
+
+
+####
+# ROC curve, in- and out-of-sample
+####
+
+require(ROCR)
+pred <- prediction(predictions=titanic.is.predict, labels=titanic.train$survived)
+perf <- performance(pred, measure = "tpr", x.measure = "fpr") 
+plot(perf, col="red")
+abline(0,1, lty=2)
+performance(pred, measure = "auc") 
+
+pred <- prediction(predictions=titanic.oos.predict, labels=titanic.pred$survived)
+perf <- performance(pred, measure = "tpr", x.measure = "fpr") 
+plot(perf, col="blue", add=TRUE)
+performance(pred, measure = "auc") 
+
+
+
+####
+# A function to do the Hosmer-Lemeshow test in R.
+# R Function is due to Peter D. M. Macdonald, McMaster University.
+# 
+hosmerlem <-
+  function (y, yhat, g = 10) 
+  {
+    yhat<-jitter(yhat) # Esarey added this
+    cutyhat <- cut(yhat, breaks = quantile(yhat, probs = seq(0, 
+                                                             1, 1/g)), include.lowest = T)
+    obs <- xtabs(cbind(1 - y, y) ~ cutyhat)
+    expect <- xtabs(cbind(1 - yhat, yhat) ~ cutyhat)
+    chisq <- sum((obs - expect)^2/expect)
+    P <- 1 - pchisq(chisq, g - 2)
+    c("X^2" = chisq, Df = g - 2, "P(>Chi)" = P)
+  }
+#
+######
+
+hl.is.dat<-na.omit(data.frame(survived=titanic.train$survived, predict=titanic.is.predict))
+hosmerlem(hl.is.dat$survived, hl.is.dat$predict)
+
+hl.oos.dat<-na.omit(data.frame(survived=titanic.pred$survived, predict=titanic.oos.predict))
+hosmerlem(hl.oos.dat$survived, hl.oos.dat$predict)
+
+
+####
+# Heat map assessment, in- and out-of-sample
+####
+
+# in-sample fit assessment
+library(heatmapFit)
+heatmap.fit(form=survived ~ pclass + sex + pclass:sex + age + sibsp, fam = binomial(logit), dat=titanic.train)
+
+# out-of-sample fit assessment--no package yet :-(
+library(fANCOVA)
+loess.data<-as.data.frame(cbind(titanic.oos.predict, survived=titanic.pred$survived))
+loess.data<-na.omit(loess.data)
+
+titanic.lo.mod<-loess.as(loess.data$titanic.oos.predict, loess.data$survived, degree=1)
+titanic.lo.pred<-predict(titanic.lo.mod, newdata=titanic.oos.predict)
+summary(titanic.lo.mod)
+
+oo<-order(titanic.oos.predict)
+
+plot(titanic.lo.pred[oo]~titanic.oos.predict[oo], type="l", ylim=c(0,1), xlab="logit predicted Pr(survive)", ylab="empirical probability Pr(survive)")
+abline(0, 1, lty=2)
+rug(titanic.oos.predict)
