@@ -1,4 +1,7 @@
+rm(list=ls())
+
 # load packages
+
 suppressMessages(library(dplyr))
 library(hflights)
 
@@ -44,3 +47,42 @@ flights[, c("DepTime", "ArrTime", "FlightNum")]
 
 # dplyr approach
 select(flights, DepTime, ArrTime, FlightNum)
+
+# use colon to select multiple contiguous columns, and use `contains` to match
+# columns by name note: `starts_with`, `ends_with`, and `matches` (for regular
+# expressions) can also be used to match columns by name
+select(flights, Year:DayofMonth, contains("Taxi"), contains("Delay"))
+
+
+# “Chaining” or “Pipelining”
+# 
+# Usual way to perform multiple operations in one line is by nesting Can write
+# commands in a natural order by using the %>% infix operator (which can be
+# pronounced as “then”)
+
+# nesting method to select UniqueCarrier and DepDelay columns and filter for
+# delays over 60 minutes
+
+filter(select(flights, UniqueCarrier, DepDelay), DepDelay > 60)
+
+
+# Chaining increases readability significantly when there are many commands 
+# Operator is automatically imported from the magrittr package Can be used to
+# replace nesting in R commands outside of dplyr
+
+# create two vectors and calculate Euclidian distance between them
+x1 <- 1:5; x2 <- 2:6
+sqrt(sum((x1-x2)^2))
+
+# chaining method
+(x1-x2)^2 %>% sum() %>% sqrt()
+
+# use `desc` for descending
+flights %>%
+  select(UniqueCarrier, DepDelay) %>%
+  arrange(desc(DepDelay))
+
+
+
+
+

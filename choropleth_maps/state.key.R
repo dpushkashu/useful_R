@@ -1,0 +1,14 @@
+state.key <- structure(list(code = 1:61, state = c("alabama", "alaska", "american samoa", 
+    "arizona", "arkansas", "california", "colorado", "connecticut", 
+    "delaware", "district of columbia", "federated states of micronesia", 
+    "florida", "georgia", "guam", "hawaii", "idaho", "illinois", 
+    "indiana", "iowa", "kansas", "kentucky", "louisiana", "maine", 
+    "marshall islands", "maryland", "massachusetts", "michigan", 
+    "minnesota", "mississippi", "missouri", "montana", "nebraska", 
+    "nevada", "new hampshire", "new jersey", "new mexico", "new york", 
+    "north carolina", "north dakota", "northern mariana islands", 
+    "ohio", "oklahoma", "oregon", "palau", "pennsylvania", "puerto rico", 
+    "rhode island", "south carolina", "south dakota", "tennessee", 
+    "texas", "utah", "vermont", "virgin islands", "virginia", "washington", 
+    "west virginia", "wisconsin", "wyoming", "united states", "interstate compact"
+    )), .Names = c("code", "state"), row.names = c(NA, -61L), class = "data.frame")
