@@ -1,3 +1,17 @@
+# Assigning a variable name
+assign(paste0("perf.a", "1"), 5)
+
+# SHORT FORMULA CALL FOR MANY VARIABLES WHEN BUILDING A MODEL
+#You can use . as described in the help page for formula. The . stands for "all columns #not otherwise in the formula".
+
+lm(output ~ ., data = myData).
+
+Alternatively, construct the formula manually with paste. This example is from the as.formula() help page:
+
+xnam <- paste("x", 1:25, sep=“”)
+(fmla <- as.formula(paste("y ~ ", paste(xnam, collapse= "+"))))
+You can then insert this object into regression function: lm(fmla, data = myData).
+
 # READ IN CSV FILE
 read.csv(file, header = TRUE, sep = ",", quote = "\"",
          dec = ".", fill = TRUE, comment.char = "", ...)
