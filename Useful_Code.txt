@@ -1,3 +1,17 @@
+### Function to Write Code ###############################################
+
+# Create character vector of symbols
+symbols <- c("amzn", "gspc", "ibm", "yhoo")
+
+f <- function(x){
+  paste0("multi.df$",(x),".idx <- multi.df$",(x),"/multi.df$",(x),"[1]")
+}
+
+# Execute Code Written by Function
+eval(parse(text=f(symbols)))
+
+##########################################################################
+
 # Assigning a variable name
 assign(paste0("perf.a", "1"), 5)
 
@@ -20,7 +34,7 @@ read.csv(file, header = TRUE, sep = ",", quote = "\"",
 write.csv(numdata, "numdata.csv", row.names=FALSE, na="")
 
 # SELECT SOME ROWS AT RANDOME
-df[sample(nrow(df), 3), ] 
+df[sample(nrow(df), 3), ]
 
 # REMOVING A VARIABLE
 dataframe$VAR <- NULL
@@ -36,7 +50,7 @@ par(mfrow=c(3, 3)
 newdata <- mydata[c(-3,-5)]
 
 # delete variables v3 and v5
-mydata$v3 <- mydata$v5 <- NULL 
+mydata$v3 <- mydata$v5 <- NULL
 
 # SELECT SPECIFIC VARIABLE TYPES
 (ds[which(sapply(ds, is.numeric))])
@@ -46,8 +60,8 @@ df<-data.frame(y=rnorm(10),x1=rnorm(10),x2=rnorm(10))
 lm(y~.,df)
 
 And if you want, say, all second-order interactions, you can write y ~ . + .^2. And so on. –  Lutz Prechelt Mar 12 at 14:46
-   	 
-And if you want only some of the second order interactions, something like y ~ . + .:x1 will get you the interactions of each variable (except x1) with x1. And so on; you get the idea. –  Lutz Prechelt Mar 12 at 14:48 
+
+And if you want only some of the second order interactions, something like y ~ . + .:x1 will get you the interactions of each variable (except x1) with x1. And so on; you get the idea. –  Lutz Prechelt Mar 12 at 14:48
 
 SELECTING OBSERVATIONS
 # first 5 observations
@@ -60,7 +74,7 @@ newdata <- mydata[ which(mydata$gender=='F'
 # or
 attach(newdata)
 newdata <- mydata[ which(gender=='F' & age > 65),]
-detach(newdata) 
+detach(newdata)
 
 /////////////////////////////////////////////
 /////////////////////////////////////////////
@@ -130,7 +144,7 @@ df <- data.frame(a, b, c)
 c <- cor(ds[which(sapply(ds, is.numeric))], use="complete.obs")
 ## c is the correlations matrix
 
-## keep only the lower triangle by 
+## keep only the lower triangle by
 ## filling upper with NA
 c[upper.tri(c, diag=TRUE)] <- NA
 
