@@ -1,0 +1,2 @@
+# paste data from clipboard
+a <- read.table(pipe("pbpaste"), header = T, sep = ";")

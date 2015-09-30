@@ -1,3 +1,58 @@
+### Importing multiple .csv files into R #################################
+temp = list.files(pattern="*.csv")
+myfiles = lapply(temp, read.delim)
+
+# Quick and dirty solution to get separate data.frames ("dirty" because I haven't bothered # to clean up the .csv extension, but that's easy enough to do with some regex):
+
+temp = list.files(pattern="*.csv")
+for (i in 1:length(temp)) assign(temp[i], read.csv(temp[i]))
+
+# Another options to convert the .csv files into one data.frame.
+
+# Get the files names
+files = list.files(pattern="*.csv")
+
+# First apply read.csv, then rbind
+myfiles = do.call("rbind", lapply(files, function(x) read.csv(x, stringsAsFactors = FALSE)))
+
+# Many times I use the following, as I use data.table most of the times.
+
+library(data.table)
+DT = do.call(rbind, lapply(files, fread)
+
+# Also possible
+
+library(data.table) #1.9.5+
+DT = rbindlist(lapply(files,fread))
+
+### Function to Write Code ###############################################
+
+# Create character vector of symbols
+symbols <- c("amzn", "gspc", "ibm", "yhoo")
+
+f <- function(x){
+  paste0("multi.df$",(x),".idx <- multi.df$",(x),"/multi.df$",(x),"[1]")
+}
+
+# Execute Code Written by Function
+eval(parse(text=f(symbols)))
+
+##########################################################################
+
+# Assigning a variable name
+assign(paste0("perf.a", "1"), 5)
+
+# SHORT FORMULA CALL FOR MANY VARIABLES WHEN BUILDING A MODEL
+#You can use . as described in the help page for formula. The . stands for "all columns #not otherwise in the formula".
+
+lm(output ~ ., data = myData).
+
+Alternatively, construct the formula manually with paste. This example is from the as.formula() help page:
+
+xnam <- paste("x", 1:25, sep=“”)
+(fmla <- as.formula(paste("y ~ ", paste(xnam, collapse= "+"))))
+You can then insert this object into regression function: lm(fmla, data = myData).
+
 # READ IN CSV FILE
 read.csv(file, header = TRUE, sep = ",", quote = "\"",
          dec = ".", fill = TRUE, comment.char = "", ...)
@@ -6,7 +61,7 @@ read.csv(file, header = TRUE, sep = ",", quote = "\"",
 write.csv(numdata, "numdata.csv", row.names=FALSE, na="")
 
 # SELECT SOME ROWS AT RANDOME
-df[sample(nrow(df), 3), ] 
+df[sample(nrow(df), 3), ]
 
 # REMOVING A VARIABLE
 dataframe$VAR <- NULL
@@ -22,7 +77,7 @@ par(mfrow=c(3, 3)
 newdata <- mydata[c(-3,-5)]
 
 # delete variables v3 and v5
-mydata$v3 <- mydata$v5 <- NULL 
+mydata$v3 <- mydata$v5 <- NULL
 
 # SELECT SPECIFIC VARIABLE TYPES
 (ds[which(sapply(ds, is.numeric))])
@@ -32,8 +87,8 @@ df<-data.frame(y=rnorm(10),x1=rnorm(10),x2=rnorm(10))
 lm(y~.,df)
 
 And if you want, say, all second-order interactions, you can write y ~ . + .^2. And so on. –  Lutz Prechelt Mar 12 at 14:46
-   	 
-And if you want only some of the second order interactions, something like y ~ . + .:x1 will get you the interactions of each variable (except x1) with x1. And so on; you get the idea. –  Lutz Prechelt Mar 12 at 14:48 
+
+And if you want only some of the second order interactions, something like y ~ . + .:x1 will get you the interactions of each variable (except x1) with x1. And so on; you get the idea. –  Lutz Prechelt Mar 12 at 14:48
 
 SELECTING OBSERVATIONS
 # first 5 observations
@@ -46,7 +101,7 @@ newdata <- mydata[ which(mydata$gender=='F'
 # or
 attach(newdata)
 newdata <- mydata[ which(gender=='F' & age > 65),]
-detach(newdata) 
+detach(newdata)
 
 /////////////////////////////////////////////
 /////////////////////////////////////////////
@@ -71,8 +126,6 @@ foo <- na.omit(foo)
 foo <- foo[, colSums(is.na(foo)) == 0]
 /////////////////////////////////////////////
 /////////////////////////////////////////////
-
-
 
 # CREATE TABLE FOR CATEGORICAL VALUE; SHOW MISSING VALUES
 table(data$VAR, useNA="ifany")
@@ -116,7 +169,7 @@ df <- data.frame(a, b, c)
 c <- cor(ds[which(sapply(ds, is.numeric))], use="complete.obs")
 ## c is the correlations matrix
 
-## keep only the lower triangle by 
+## keep only the lower triangle by
 ## filling upper with NA
 c[upper.tri(c, diag=TRUE)] <- NA
 
