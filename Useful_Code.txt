@@ -1,3 +1,6 @@
+### Renaming Columns
+colnames(whales.ahabs.raw.m) <- c("whale", "ahab")
+
 ### Importing multiple .csv files into R #################################
 temp = list.files(pattern="*.csv")
 myfiles = lapply(temp, read.delim)
