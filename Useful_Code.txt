@@ -1,3 +1,11 @@
+################################ Function to Write Code
+normalize_values <- function(x){
+  paste0("multi.df$",(x),".idx <- multi.df$",(x),"/multi.df$",(x),"[1]")
+}
+
+# Execute Code Written by Function
+eval(parse(text=normalize_values(symbols)
+
 ### Importing multiple .csv files into R #################################
 temp = list.files(pattern="*.csv")
 myfiles = lapply(temp, read.delim)
