@@ -1,5 +1,18 @@
 ﻿<<<<<<< HEAD
 
+########ORDERING FACTOR LABELS
+# Order boxplots
+ds$classification <- factor(ds$classification,
+                       levels = c("Legal Assistant",
+                                  "Paralegal",
+                                  "Litigation Support",
+                                  "Other",
+                                  "Research",
+                                  "Associate",
+                                  "Of Counsel",
+                                  "Partner"
+                                  ), ordered = TRUE)
+
 ################################ Add column
 jackson.lewis <- cbind(jackson.lewis, firm = ("jackson.lewis"))
 
