@@ -5,3 +5,15 @@ sapply(airquality, function(x) sum(is.na(x)))
 apply(is.na(airquality),2,sum)
 
 colSums(is.na(airquality))
+
+
+	
+# code modified to only report missing value:
+
+M <- sapply(airquality, function(x) sum(is.na(x))); M[M>0]
+
+
+
+# for a specific column
+
+sum(is.na(x[1]))
