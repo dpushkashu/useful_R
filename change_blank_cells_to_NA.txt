@@ -1,0 +1,3 @@
+# change_blank_cells_to_NA
+
+dat2 <- read.csv("data2.csv", header=T, na.strings=c("","NA"))

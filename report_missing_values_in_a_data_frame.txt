@@ -2,6 +2,7 @@
 
 sapply(airquality, function(x) sum(is.na(x)))
 
+
 apply(is.na(airquality),2,sum)
 
 colSums(is.na(airquality))
