@@ -1,6 +1,12 @@
 ﻿<<<<<<< HEAD
 
 
+###############################################
+# SELECT RECORDS WITHOUT NA VALUES            #
+###############################################
+
+newdata <- ds[which(!is.na(ds$date.received)),]
+
 ########ORDERING FACTOR LABELS
 # Order boxplots
 ds$classification <- factor(ds$classification,
