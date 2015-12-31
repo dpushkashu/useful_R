@@ -1,0 +1,3 @@
+# clear_global_environment
+
+rm(list=ls(all=T))

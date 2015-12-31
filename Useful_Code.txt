@@ -1,5 +1,40 @@
+﻿<<<<<<< HEAD
+
+
+###############################################
+# SELECT RECORDS WITHOUT NA VALUES            #
+###############################################
+
+newdata <- ds[which(!is.na(ds$date.received)),]
+
+########ORDERING FACTOR LABELS
+# Order boxplots
+ds$classification <- factor(ds$classification,
+                       levels = c("Legal Assistant",
+                                  "Paralegal",
+                                  "Litigation Support",
+                                  "Other",
+                                  "Research",
+                                  "Associate",
+                                  "Of Counsel",
+                                  "Partner"
+                                  ), ordered = TRUE)
+
+################################ Add column
+jackson.lewis <- cbind(jackson.lewis, firm = ("jackson.lewis"))
+
+
+################################ Function to Write Code
+normalize_values <- function(x){
+  paste0("multi.df$",(x),".idx <- multi.df$",(x),"/multi.df$",(x),"[1]")
+}
+
+# Execute Code Written by Function
+eval(parse(text=normalize_values(symbols)
+=======
 ### Renaming Columns
 colnames(whales.ahabs.raw.m) <- c("whale", "ahab")
+>>>>>>> 64b6ac1dd1ac27a613f53979a61ad76bbae279fd
 
 ### Importing multiple .csv files into R #################################
 temp = list.files(pattern="*.csv")

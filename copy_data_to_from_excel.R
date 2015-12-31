@@ -25,4 +25,6 @@ x <- readClipboard()
 x
 
 x <- read.table(file = "clipboard", sep = "\t", header=FALSE)
-x
+moments(dat)
+summary(dat)
+hist(dat$Number.of.Reviews)
