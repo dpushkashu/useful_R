@@ -98,7 +98,7 @@ read.csv(file, header = TRUE, sep = ",", quote = "\"",
 # WRITING OUT TO A CVS FILE
 write.csv(numdata, "numdata.csv", row.names=FALSE, na="")
 
-# SELECT SOME ROWS AT RANDOME
+# SELECT SOME ROWS AT RANDOM
 df[sample(nrow(df), 3), ]
 
 # REMOVING A VARIABLE
