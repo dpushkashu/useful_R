@@ -1,0 +1,7 @@
+The things to consider when choosing an apply function are basically:
+
+    What class is my input data? – vector, matrix, data frame…
+    On which subsets of that data do I want the function to act? – rows, columns, all values…
+    What class will the function return? How is the original data structure transformed?
+
+It’s the usual input-process-output story: what do I have, what do I want and what lies inbetween?
